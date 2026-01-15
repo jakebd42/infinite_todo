@@ -18,6 +18,7 @@ function App() {
   const [subcategoryFilters, setSubcategoryFilters] = useState([])
   const [sortBy, setSortBy] = useState('newest')
   const [mapBounds, setMapBounds] = useState(null)
+  const [sharedRequest, setSharedRequest] = useState(null)
 
   useEffect(() => {
     // Check for existing session
@@ -33,8 +34,27 @@ function App() {
       }
     )
 
+    // Check for shared request in URL
+    const params = new URLSearchParams(window.location.search)
+    const requestId = params.get('request')
+    if (requestId) {
+      fetchSharedRequest(requestId)
+    }
+
     return () => subscription.unsubscribe()
   }, [])
+
+  async function fetchSharedRequest(requestId) {
+    const { data, error } = await supabase
+      .from('requests')
+      .select('*')
+      .eq('id', requestId)
+      .single()
+
+    if (!error && data) {
+      setSharedRequest(data)
+    }
+  }
 
   useEffect(() => {
     if (mapBounds) {
@@ -324,6 +344,7 @@ function App() {
         onBoundsChange={handleBoundsChange}
         selectedLocation={selectedLocation}
         userId={session?.user?.id}
+        sharedRequest={sharedRequest}
       />
 
       {showForm && (

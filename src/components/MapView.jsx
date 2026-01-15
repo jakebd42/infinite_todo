@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'react-leaflet-cluster/lib/assets/MarkerCluster.css'
@@ -93,6 +93,20 @@ function MapEventHandler({ onClick, onBoundsChange }) {
   return null
 }
 
+function FlyToShared({ sharedRequest }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (sharedRequest) {
+      map.flyTo([sharedRequest.latitude, sharedRequest.longitude], 17, {
+        duration: 1.5
+      })
+    }
+  }, [sharedRequest, map])
+
+  return null
+}
+
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-US', {
     month: 'short',
@@ -101,7 +115,7 @@ function formatDate(dateString) {
   })
 }
 
-export default function MapView({ requests, onMapClick, onVote, onEdit, onDelete, onBoundsChange, selectedLocation, userId }) {
+export default function MapView({ requests, onMapClick, onVote, onEdit, onDelete, onBoundsChange, selectedLocation, userId, sharedRequest }) {
   // Default center: Downtown Portland, OR
   const defaultCenter = [45.5152, -122.6784]
   const defaultZoom = 14
@@ -118,6 +132,7 @@ export default function MapView({ requests, onMapClick, onVote, onEdit, onDelete
       />
 
       <MapEventHandler onClick={onMapClick} onBoundsChange={onBoundsChange} />
+      <FlyToShared sharedRequest={sharedRequest} />
 
       {selectedLocation && (
         <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={selectedIcon}>
@@ -171,6 +186,17 @@ export default function MapView({ requests, onMapClick, onVote, onEdit, onDelete
                     title="Downvote"
                   >
                     -{request.downvotes}
+                  </button>
+                  <button
+                    className="btn-share"
+                    onClick={() => {
+                      const url = `${window.location.origin}?request=${request.id}`
+                      navigator.clipboard.writeText(url)
+                      alert('Link copied to clipboard!')
+                    }}
+                    title="Share"
+                  >
+                    Share
                   </button>
                 </div>
 
