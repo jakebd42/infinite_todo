@@ -10,7 +10,10 @@
       "Bash(git commit:*)",
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(psql:*)",
+      "Bash(npx supabase:*)",
+      "Bash(export SUPABASE_ACCESS_TOKEN:*)"
     ]
   }
 }

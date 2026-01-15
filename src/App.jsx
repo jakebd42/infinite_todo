@@ -31,39 +31,48 @@ function App() {
 
   useEffect(() => {
     fetchRequests()
-  }, [filter])
+  }, [filter, session])
 
   async function fetchRequests() {
+    // Fetch requests (vote counts are now stored in the table)
     let query = supabase
       .from('requests')
-      .select(`
-        *,
-        votes (vote_type, user_id)
-      `)
+      .select('*')
       .order('created_at', { ascending: false })
 
     if (filter !== 'all') {
       query = query.eq('category', filter)
     }
 
-    const { data, error } = await query
+    const { data: requestsData, error: requestsError } = await query
 
-    if (error) {
-      console.error('Error fetching requests:', error)
-    } else {
-      // Calculate vote counts
-      const requestsWithVotes = data.map(request => {
-        const upvotes = request.votes?.filter(v => v.vote_type === 'up').length || 0
-        const downvotes = request.votes?.filter(v => v.vote_type === 'down').length || 0
-        return {
-          ...request,
-          upvotes,
-          downvotes,
-          score: upvotes - downvotes
-        }
-      })
-      setRequests(requestsWithVotes)
+    if (requestsError) {
+      console.error('Error fetching requests:', requestsError)
+      return
     }
+
+    // Only fetch current user's votes (not everyone's)
+    let userVotes = {}
+    if (session?.user?.id) {
+      const { data: votesData } = await supabase
+        .from('votes')
+        .select('request_id, vote_type')
+        .eq('user_id', session.user.id)
+
+      if (votesData) {
+        votesData.forEach(vote => {
+          userVotes[vote.request_id] = vote.vote_type
+        })
+      }
+    }
+
+    // Attach user's vote to each request
+    const requestsWithUserVote = requestsData.map(request => ({
+      ...request,
+      userVote: userVotes[request.id] || null
+    }))
+
+    setRequests(requestsWithUserVote)
   }
 
   function handleMapClick(latlng) {
@@ -199,7 +208,6 @@ function App() {
         onMapClick={handleMapClick}
         onVote={handleVote}
         selectedLocation={selectedLocation}
-        userId={session?.user?.id}
       />
 
       {showForm && (

@@ -67,7 +67,7 @@ function formatDate(dateString) {
   })
 }
 
-export default function MapView({ requests, onMapClick, onVote, selectedLocation, userId }) {
+export default function MapView({ requests, onMapClick, onVote, selectedLocation }) {
   // Default center: Downtown Portland, OR
   const defaultCenter = [45.5152, -122.6784]
   const defaultZoom = 14
@@ -118,11 +118,7 @@ export default function MapView({ requests, onMapClick, onVote, selectedLocation
 
               <div className="vote-section">
                 <button
-                  className={`vote-btn vote-up ${
-                    request.votes?.some(v => v.user_id === userId && v.vote_type === 'up')
-                      ? 'voted'
-                      : ''
-                  }`}
+                  className={`vote-btn vote-up ${request.userVote === 'up' ? 'voted' : ''}`}
                   onClick={() => onVote(request.id, 'up')}
                   title="Upvote"
                 >
@@ -130,11 +126,7 @@ export default function MapView({ requests, onMapClick, onVote, selectedLocation
                 </button>
                 <span className="vote-score">{request.score}</span>
                 <button
-                  className={`vote-btn vote-down ${
-                    request.votes?.some(v => v.user_id === userId && v.vote_type === 'down')
-                      ? 'voted'
-                      : ''
-                  }`}
+                  className={`vote-btn vote-down ${request.userVote === 'down' ? 'voted' : ''}`}
                   onClick={() => onVote(request.id, 'down')}
                   title="Downvote"
                 >
