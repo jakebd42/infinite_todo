@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
+import 'react-leaflet-cluster/lib/assets/MarkerCluster.css'
+import 'react-leaflet-cluster/lib/assets/MarkerCluster.Default.css'
 
 // Fix for default marker icons in React-Leaflet
 delete L.Icon.Default.prototype._getIconUrl
@@ -122,52 +125,59 @@ export default function MapView({ requests, onMapClick, onVote, onBoundsChange, 
         </Marker>
       )}
 
-      {requests.map((request) => (
-        <Marker
-          key={request.id}
-          position={[request.latitude, request.longitude]}
-          icon={createCategoryIcon(request.category)}
-        >
-          <Popup>
-            <div className="popup-content">
-              <span className={`category-badge category-${request.category}`}>
-                {request.category}
-              </span>
-              <span className={`urgency-badge urgency-${request.urgency}`}>
-                {request.urgency}
-              </span>
+      <MarkerClusterGroup
+        chunkedLoading
+        maxClusterRadius={50}
+        spiderfyOnMaxZoom={true}
+        showCoverageOnHover={false}
+      >
+        {requests.map((request) => (
+          <Marker
+            key={request.id}
+            position={[request.latitude, request.longitude]}
+            icon={createCategoryIcon(request.category)}
+          >
+            <Popup>
+              <div className="popup-content">
+                <span className={`category-badge category-${request.category}`}>
+                  {request.category}
+                </span>
+                <span className={`urgency-badge urgency-${request.urgency}`}>
+                  {request.urgency}
+                </span>
 
-              {request.subcategory && (
-                <p className="popup-subcategory">{request.subcategory}</p>
-              )}
+                {request.subcategory && (
+                  <p className="popup-subcategory">{request.subcategory}</p>
+                )}
 
-              <p className="popup-notes">{request.notes}</p>
+                <p className="popup-notes">{request.notes}</p>
 
-              <p className="popup-date">
-                {formatDate(request.created_at)}
-              </p>
+                <p className="popup-date">
+                  {formatDate(request.created_at)}
+                </p>
 
-              <div className="vote-section">
-                <button
-                  className={`vote-btn vote-up ${request.userVote === 'up' ? 'voted' : ''}`}
-                  onClick={() => onVote(request.id, 'up')}
-                  title="Upvote"
-                >
-                  +{request.upvotes}
-                </button>
-                <span className="vote-score">{request.score}</span>
-                <button
-                  className={`vote-btn vote-down ${request.userVote === 'down' ? 'voted' : ''}`}
-                  onClick={() => onVote(request.id, 'down')}
-                  title="Downvote"
-                >
-                  -{request.downvotes}
-                </button>
+                <div className="vote-section">
+                  <button
+                    className={`vote-btn vote-up ${request.userVote === 'up' ? 'voted' : ''}`}
+                    onClick={() => onVote(request.id, 'up')}
+                    title="Upvote"
+                  >
+                    +{request.upvotes}
+                  </button>
+                  <span className="vote-score">{request.score}</span>
+                  <button
+                    className={`vote-btn vote-down ${request.userVote === 'down' ? 'voted' : ''}`}
+                    onClick={() => onVote(request.id, 'down')}
+                    title="Downvote"
+                  >
+                    -{request.downvotes}
+                  </button>
+                </div>
               </div>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   )
 }

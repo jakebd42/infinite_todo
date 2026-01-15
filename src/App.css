@@ -189,6 +189,29 @@ header .tagline {
   min-height: 400px;
 }
 
+/* Cluster overrides */
+.marker-cluster {
+  background: rgba(59, 130, 246, 0.6) !important;
+}
+
+.marker-cluster div {
+  background: rgba(59, 130, 246, 0.9) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.marker-cluster-small {
+  background: rgba(59, 130, 246, 0.5) !important;
+}
+
+.marker-cluster-medium {
+  background: rgba(59, 130, 246, 0.6) !important;
+}
+
+.marker-cluster-large {
+  background: rgba(59, 130, 246, 0.7) !important;
+}
+
 /* Popup */
 .popup-content {
   min-width: 200px;
