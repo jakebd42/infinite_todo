@@ -1,10 +1,58 @@
 import { useState } from 'react'
 
+const subcategories = {
+  safety: [
+    'Daylight intersection',
+    'Crosswalk needed',
+    'Modal filter',
+    '4-way stop',
+    'Dangerous slip lane',
+    'Speed reduction needed',
+    'Better lighting',
+    'Protected bike lane',
+    'Signal timing issue',
+    'Other'
+  ],
+  transit: [
+    'Bus stop bench',
+    'Bus shelter',
+    'Frequent conflicts/slowness',
+    'Bike parking',
+    'Route suggestion',
+    'Other'
+  ],
+  beautification: [
+    'Mural opportunity',
+    'Placemaking street art',
+    'Easement needs love',
+    'Tree planting',
+    'Community garden',
+    'Trash/litter cleanup',
+    'Other'
+  ],
+  accessibility: [
+    'Steep curb dropoff',
+    'Drainage issue',
+    'Sidewalk break',
+    'Audible crossing signal',
+    'Tactile paving needed',
+    'Ramp needed',
+    'Other'
+  ],
+  other: ['Other']
+}
+
 export default function RequestForm({ location, onSubmit, onCancel }) {
   const [notes, setNotes] = useState('')
-  const [category, setCategory] = useState('other')
+  const [category, setCategory] = useState('safety')
+  const [subcategory, setSubcategory] = useState(subcategories.safety[0])
   const [urgency, setUrgency] = useState('medium')
   const [submitting, setSubmitting] = useState(false)
+
+  function handleCategoryChange(newCategory) {
+    setCategory(newCategory)
+    setSubcategory(subcategories[newCategory][0])
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -13,7 +61,7 @@ export default function RequestForm({ location, onSubmit, onCancel }) {
       return
     }
     setSubmitting(true)
-    await onSubmit({ notes, category, urgency })
+    await onSubmit({ notes, category, subcategory, urgency })
     setSubmitting(false)
   }
 
@@ -31,13 +79,26 @@ export default function RequestForm({ location, onSubmit, onCancel }) {
             <select
               id="category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
             >
-              <option value="transit">Transit (bus stops, bike lanes, etc.)</option>
-              <option value="safety">Safety (speeding, lighting, etc.)</option>
-              <option value="beautification">Beautification (murals, gardens, etc.)</option>
-              <option value="accessibility">Accessibility (ramps, crossings, etc.)</option>
+              <option value="safety">Safety</option>
+              <option value="transit">Transit</option>
+              <option value="beautification">Beautification</option>
+              <option value="accessibility">Accessibility</option>
               <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="subcategory">Type</label>
+            <select
+              id="subcategory"
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+            >
+              {subcategories[category].map((sub) => (
+                <option key={sub} value={sub}>{sub}</option>
+              ))}
             </select>
           </div>
 

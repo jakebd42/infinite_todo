@@ -106,6 +106,10 @@ export default function MapView({ requests, onMapClick, onVote, selectedLocation
                 {request.urgency}
               </span>
 
+              {request.subcategory && (
+                <p className="popup-subcategory">{request.subcategory}</p>
+              )}
+
               <p className="popup-notes">{request.notes}</p>
 
               <p className="popup-date">

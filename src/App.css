@@ -170,6 +170,13 @@ header .tagline {
 .urgency-medium { background: #fef3c7; color: #92400e; }
 .urgency-high { background: #fee2e2; color: #991b1b; }
 
+.popup-subcategory {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0.25rem 0 0.5rem 0;
+}
+
 .popup-notes {
   margin: 0.5rem 0;
   color: #334155;

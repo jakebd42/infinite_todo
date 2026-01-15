@@ -1,0 +1,41 @@
+Categories
+
+- Safety
+  - Daylight intersection
+  - Crosswalk needed
+  - Modal filter
+  - 4-way stop
+  - Dangerous slip lane
+  - Speed reduction needed
+  - Better lighting
+  - Protected bike lane
+  - Signal timing issue
+  - Other
+
+- Transit
+  - Bus stop bench
+  - Bus shelter
+  - Frequent conflicts/slowness
+  - Bike parking
+  - Route suggestion
+  - Other
+
+- Beautification
+  - Mural opportunity
+  - Placemaking street art
+  - Easement needs love
+  - Tree planting
+  - Community garden
+  - Trash/litter cleanup
+  - Other
+
+- Accessibility
+  - Steep curb dropoff
+  - Drainage issue
+  - Sidewalk break
+  - Audible crossing signal
+  - Tactile paving needed
+  - Ramp needed
+  - Other
+
+- Other

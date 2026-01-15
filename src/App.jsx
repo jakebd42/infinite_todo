@@ -105,6 +105,7 @@ function App() {
       longitude: selectedLocation.lng,
       notes: formData.notes,
       category: formData.category,
+      subcategory: formData.subcategory,
       urgency: formData.urgency
     })
 
