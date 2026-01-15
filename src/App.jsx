@@ -14,6 +14,7 @@ function App() {
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [subcategoryFilters, setSubcategoryFilters] = useState([])
   const [sortBy, setSortBy] = useState('newest')
+  const [mapBounds, setMapBounds] = useState(null)
 
   useEffect(() => {
     // Check for existing session
@@ -33,8 +34,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    fetchRequests()
-  }, [categoryFilter, subcategoryFilters, sortBy, session])
+    if (mapBounds) {
+      fetchRequests()
+    }
+  }, [categoryFilter, subcategoryFilters, sortBy, session, mapBounds])
 
   function handleCategoryFilterChange(newCategory) {
     setCategoryFilter(newCategory)
@@ -49,11 +52,21 @@ function App() {
     )
   }
 
+  function handleBoundsChange(bounds) {
+    setMapBounds(bounds)
+  }
+
   async function fetchRequests() {
-    // Fetch requests (vote counts are now stored in the table)
+    if (!mapBounds) return
+
+    // Fetch requests within viewport bounds
     let query = supabase
       .from('requests')
       .select('*')
+      .gte('latitude', mapBounds.south)
+      .lte('latitude', mapBounds.north)
+      .gte('longitude', mapBounds.west)
+      .lte('longitude', mapBounds.east)
 
     // Apply sorting
     if (sortBy === 'votes') {
@@ -255,6 +268,7 @@ function App() {
         requests={requests}
         onMapClick={handleMapClick}
         onVote={handleVote}
+        onBoundsChange={handleBoundsChange}
         selectedLocation={selectedLocation}
       />
 

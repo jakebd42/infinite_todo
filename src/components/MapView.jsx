@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 
@@ -50,12 +51,42 @@ const selectedIcon = L.divIcon({
   iconAnchor: [15, 15]
 })
 
-function MapClickHandler({ onClick }) {
-  useMapEvents({
+function MapEventHandler({ onClick, onBoundsChange }) {
+  const map = useMapEvents({
     click: (e) => {
       onClick(e.latlng)
+    },
+    moveend: () => {
+      const bounds = map.getBounds()
+      onBoundsChange({
+        north: bounds.getNorth(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        west: bounds.getWest()
+      })
+    },
+    load: () => {
+      const bounds = map.getBounds()
+      onBoundsChange({
+        north: bounds.getNorth(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        west: bounds.getWest()
+      })
     }
   })
+
+  // Fire initial bounds on mount
+  useEffect(() => {
+    const bounds = map.getBounds()
+    onBoundsChange({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest()
+    })
+  }, [])
+
   return null
 }
 
@@ -67,7 +98,7 @@ function formatDate(dateString) {
   })
 }
 
-export default function MapView({ requests, onMapClick, onVote, selectedLocation }) {
+export default function MapView({ requests, onMapClick, onVote, onBoundsChange, selectedLocation }) {
   // Default center: Downtown Portland, OR
   const defaultCenter = [45.5152, -122.6784]
   const defaultZoom = 14
@@ -83,7 +114,7 @@ export default function MapView({ requests, onMapClick, onVote, selectedLocation
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      <MapClickHandler onClick={onMapClick} />
+      <MapEventHandler onClick={onMapClick} onBoundsChange={onBoundsChange} />
 
       {selectedLocation && (
         <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={selectedIcon}>
