@@ -68,9 +68,9 @@ function formatDate(dateString) {
 }
 
 export default function MapView({ requests, onMapClick, onVote, selectedLocation, userId }) {
-  // Default center (roughly center of US - you can change this)
-  const defaultCenter = [39.8283, -98.5795]
-  const defaultZoom = 4
+  // Default center: Downtown Portland, OR
+  const defaultCenter = [45.5152, -122.6784]
+  const defaultZoom = 14
 
   return (
     <MapContainer
