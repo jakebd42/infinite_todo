@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { subcategories, categories } from '../data/categories'
 
-export default function RequestForm({ location, onSubmit, onCancel }) {
-  const [notes, setNotes] = useState('')
-  const [category, setCategory] = useState('safety')
-  const [subcategory, setSubcategory] = useState(subcategories.safety[0])
-  const [urgency, setUrgency] = useState('medium')
+export default function RequestForm({ location, initialData, onSubmit, onCancel, isEditing }) {
+  const [notes, setNotes] = useState(initialData?.notes || '')
+  const [category, setCategory] = useState(initialData?.category || 'safety')
+  const [subcategory, setSubcategory] = useState(
+    initialData?.subcategory || subcategories[initialData?.category || 'safety'][0]
+  )
+  const [urgency, setUrgency] = useState(initialData?.urgency || 'medium')
   const [submitting, setSubmitting] = useState(false)
 
   function handleCategoryChange(newCategory) {
@@ -27,7 +29,7 @@ export default function RequestForm({ location, onSubmit, onCancel }) {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>New Request</h2>
+        <h2>{isEditing ? 'Edit Request' : 'New Request'}</h2>
         <p className="location-display">
           Location: {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
         </p>
@@ -98,7 +100,7 @@ export default function RequestForm({ location, onSubmit, onCancel }) {
               className="btn btn-primary"
               disabled={submitting}
             >
-              {submitting ? 'Submitting...' : 'Submit Request'}
+              {submitting ? (isEditing ? 'Saving...' : 'Submitting...') : (isEditing ? 'Save Changes' : 'Submit Request')}
             </button>
           </div>
         </form>

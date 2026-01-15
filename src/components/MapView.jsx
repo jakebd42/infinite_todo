@@ -101,7 +101,7 @@ function formatDate(dateString) {
   })
 }
 
-export default function MapView({ requests, onMapClick, onVote, onBoundsChange, selectedLocation }) {
+export default function MapView({ requests, onMapClick, onVote, onEdit, onDelete, onBoundsChange, selectedLocation, userId }) {
   // Default center: Downtown Portland, OR
   const defaultCenter = [45.5152, -122.6784]
   const defaultZoom = 14
@@ -173,6 +173,23 @@ export default function MapView({ requests, onMapClick, onVote, onBoundsChange, 
                     -{request.downvotes}
                   </button>
                 </div>
+
+                {userId && request.user_id === userId && (
+                  <div className="owner-actions">
+                    <button
+                      className="btn-edit"
+                      onClick={() => onEdit(request)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => onDelete(request.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             </Popup>
           </Marker>

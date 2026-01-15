@@ -14,7 +14,8 @@
       "Bash(psql:*)",
       "Bash(npx supabase:*)",
       "Bash(export SUPABASE_ACCESS_TOKEN:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(curl:*)"
     ]
   }
 }

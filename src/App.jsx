@@ -12,6 +12,7 @@ function App() {
   const [requests, setRequests] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [showAR, setShowAR] = useState(false)
+  const [editingRequest, setEditingRequest] = useState(null)
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [subcategoryFilters, setSubcategoryFilters] = useState([])
@@ -168,6 +169,46 @@ function App() {
     }
   }
 
+  function handleEdit(request) {
+    setEditingRequest(request)
+  }
+
+  async function handleUpdateRequest(formData) {
+    const { error } = await supabase
+      .from('requests')
+      .update({
+        notes: formData.notes,
+        category: formData.category,
+        subcategory: formData.subcategory,
+        urgency: formData.urgency
+      })
+      .eq('id', editingRequest.id)
+
+    if (error) {
+      alert('Error updating request: ' + error.message)
+    } else {
+      setEditingRequest(null)
+      fetchRequests()
+    }
+  }
+
+  async function handleDelete(requestId) {
+    if (!confirm('Are you sure you want to delete this request?')) {
+      return
+    }
+
+    const { error } = await supabase
+      .from('requests')
+      .delete()
+      .eq('id', requestId)
+
+    if (error) {
+      alert('Error deleting request: ' + error.message)
+    } else {
+      fetchRequests()
+    }
+  }
+
   async function handleVote(requestId, voteType) {
     if (!session) {
       alert('Please sign in to vote')
@@ -278,8 +319,11 @@ function App() {
         requests={requests}
         onMapClick={handleMapClick}
         onVote={handleVote}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
         onBoundsChange={handleBoundsChange}
         selectedLocation={selectedLocation}
+        userId={session?.user?.id}
       />
 
       {showForm && (
@@ -290,6 +334,16 @@ function App() {
             setShowForm(false)
             setSelectedLocation(null)
           }}
+        />
+      )}
+
+      {editingRequest && (
+        <RequestForm
+          location={{ lat: editingRequest.latitude, lng: editingRequest.longitude }}
+          initialData={editingRequest}
+          onSubmit={handleUpdateRequest}
+          onCancel={() => setEditingRequest(null)}
+          isEditing
         />
       )}
 
