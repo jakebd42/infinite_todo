@@ -405,3 +405,69 @@ header .tagline {
     width: 100%;
   }
 }
+
+/* AR View */
+.btn-ar {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-ar:hover {
+  opacity: 0.9;
+}
+
+.ar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+}
+
+.ar-close {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2001;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ar-count {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2001;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.ar-loading,
+.ar-error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.ar-hint {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+}

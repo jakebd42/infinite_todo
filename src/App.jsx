@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient'
 import Auth from './components/Auth'
 import MapView from './components/MapView'
 import RequestForm from './components/RequestForm'
+import ARView from './components/ARView'
 import { subcategories, categories } from './data/categories'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [requests, setRequests] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [showAR, setShowAR] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [subcategoryFilters, setSubcategoryFilters] = useState([])
@@ -247,6 +249,14 @@ function App() {
           <option value="newest">Newest</option>
           <option value="votes">Top Voted</option>
         </select>
+
+        <button
+          className="btn btn-ar"
+          onClick={() => setShowAR(true)}
+          title="View in AR (mobile only)"
+        >
+          AR View
+        </button>
       </div>
 
       {categoryFilter !== 'all' && (
@@ -281,6 +291,10 @@ function App() {
             setSelectedLocation(null)
           }}
         />
+      )}
+
+      {showAR && (
+        <ARView onClose={() => setShowAR(false)} />
       )}
     </div>
   )
