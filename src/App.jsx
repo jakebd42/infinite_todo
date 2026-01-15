@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient'
 import Auth from './components/Auth'
 import MapView from './components/MapView'
 import RequestForm from './components/RequestForm'
+import { subcategories, categories } from './data/categories'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -10,7 +11,8 @@ function App() {
   const [requests, setRequests] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState(null)
-  const [filter, setFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [subcategoryFilters, setSubcategoryFilters] = useState([])
 
   useEffect(() => {
     // Check for existing session
@@ -31,7 +33,20 @@ function App() {
 
   useEffect(() => {
     fetchRequests()
-  }, [filter, session])
+  }, [categoryFilter, subcategoryFilters, session])
+
+  function handleCategoryFilterChange(newCategory) {
+    setCategoryFilter(newCategory)
+    setSubcategoryFilters([]) // Reset subcategory filters when category changes
+  }
+
+  function toggleSubcategoryFilter(subcategory) {
+    setSubcategoryFilters(prev =>
+      prev.includes(subcategory)
+        ? prev.filter(s => s !== subcategory)
+        : [...prev, subcategory]
+    )
+  }
 
   async function fetchRequests() {
     // Fetch requests (vote counts are now stored in the table)
@@ -40,8 +55,12 @@ function App() {
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (filter !== 'all') {
-      query = query.eq('category', filter)
+    if (categoryFilter !== 'all') {
+      query = query.eq('category', categoryFilter)
+    }
+
+    if (subcategoryFilters.length > 0) {
+      query = query.in('subcategory', subcategoryFilters)
     }
 
     const { data: requestsData, error: requestsError } = await query
@@ -191,17 +210,30 @@ function App() {
 
         <select
           className="filter-select"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          value={categoryFilter}
+          onChange={(e) => handleCategoryFilterChange(e.target.value)}
         >
           <option value="all">All Categories</option>
-          <option value="transit">Transit</option>
-          <option value="safety">Safety</option>
-          <option value="beautification">Beautification</option>
-          <option value="accessibility">Accessibility</option>
-          <option value="other">Other</option>
+          {categories.map((cat) => (
+            <option key={cat.value} value={cat.value}>{cat.label}</option>
+          ))}
         </select>
       </div>
+
+      {categoryFilter !== 'all' && (
+        <div className="subcategory-filters">
+          {subcategories[categoryFilter].map((sub) => (
+            <label key={sub} className={`subcategory-chip ${subcategoryFilters.includes(sub) ? 'active' : ''}`}>
+              <input
+                type="checkbox"
+                checked={subcategoryFilters.includes(sub)}
+                onChange={() => toggleSubcategoryFilter(sub)}
+              />
+              {sub}
+            </label>
+          ))}
+        </div>
+      )}
 
       <MapView
         requests={requests}

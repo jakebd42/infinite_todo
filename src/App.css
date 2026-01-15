@@ -138,6 +138,43 @@ header .tagline {
   background: white;
 }
 
+/* Subcategory Filters */
+.subcategory-filters {
+  background: #f8fafc;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.subcategory-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.subcategory-chip:hover {
+  border-color: #94a3b8;
+}
+
+.subcategory-chip.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.subcategory-chip input {
+  display: none;
+}
+
 /* Map */
 .map-container {
   flex: 1;

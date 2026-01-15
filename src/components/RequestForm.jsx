@@ -1,46 +1,5 @@
 import { useState } from 'react'
-
-const subcategories = {
-  safety: [
-    'Daylight intersection',
-    'Crosswalk needed',
-    'Modal filter',
-    '4-way stop',
-    'Dangerous slip lane',
-    'Speed reduction needed',
-    'Better lighting',
-    'Protected bike lane',
-    'Signal timing issue',
-    'Other'
-  ],
-  transit: [
-    'Bus stop bench',
-    'Bus shelter',
-    'Frequent conflicts/slowness',
-    'Bike parking',
-    'Route suggestion',
-    'Other'
-  ],
-  beautification: [
-    'Mural opportunity',
-    'Placemaking street art',
-    'Easement needs love',
-    'Tree planting',
-    'Community garden',
-    'Trash/litter cleanup',
-    'Other'
-  ],
-  accessibility: [
-    'Steep curb dropoff',
-    'Drainage issue',
-    'Sidewalk break',
-    'Audible crossing signal',
-    'Tactile paving needed',
-    'Ramp needed',
-    'Other'
-  ],
-  other: ['Other']
-}
+import { subcategories, categories } from '../data/categories'
 
 export default function RequestForm({ location, onSubmit, onCancel }) {
   const [notes, setNotes] = useState('')
@@ -81,11 +40,9 @@ export default function RequestForm({ location, onSubmit, onCancel }) {
               value={category}
               onChange={(e) => handleCategoryChange(e.target.value)}
             >
-              <option value="safety">Safety</option>
-              <option value="transit">Transit</option>
-              <option value="beautification">Beautification</option>
-              <option value="accessibility">Accessibility</option>
-              <option value="other">Other</option>
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
             </select>
           </div>
 
