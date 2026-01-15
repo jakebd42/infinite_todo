@@ -13,6 +13,7 @@ function App() {
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [subcategoryFilters, setSubcategoryFilters] = useState([])
+  const [sortBy, setSortBy] = useState('newest')
 
   useEffect(() => {
     // Check for existing session
@@ -33,7 +34,7 @@ function App() {
 
   useEffect(() => {
     fetchRequests()
-  }, [categoryFilter, subcategoryFilters, session])
+  }, [categoryFilter, subcategoryFilters, sortBy, session])
 
   function handleCategoryFilterChange(newCategory) {
     setCategoryFilter(newCategory)
@@ -53,7 +54,13 @@ function App() {
     let query = supabase
       .from('requests')
       .select('*')
-      .order('created_at', { ascending: false })
+
+    // Apply sorting
+    if (sortBy === 'votes') {
+      query = query.order('score', { ascending: false })
+    } else {
+      query = query.order('created_at', { ascending: false })
+    }
 
     if (categoryFilter !== 'all') {
       query = query.eq('category', categoryFilter)
@@ -217,6 +224,15 @@ function App() {
           {categories.map((cat) => (
             <option key={cat.value} value={cat.value}>{cat.label}</option>
           ))}
+        </select>
+
+        <select
+          className="sort-select"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="newest">Newest</option>
+          <option value="votes">Top Voted</option>
         </select>
       </div>
 
