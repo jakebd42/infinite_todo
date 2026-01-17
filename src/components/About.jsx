@@ -5,7 +5,7 @@ export default function About({ onClose }) {
         <h2>About</h2>
 
         <p>
-          This is a vibe-coded project for <strong>Strong Towns PDX</strong> by Jake Dennie-Lu
+          This is a vibe-coded project for <a href="https://www.strongtownspdx.org/" target="_blank" rel="noopener noreferrer"><strong>Strong Towns PDX</strong></a> by Jake Dennie-Lu
         </p>
 
         <p>
