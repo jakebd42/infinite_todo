@@ -4,6 +4,7 @@ import Auth from './components/Auth'
 import MapView from './components/MapView'
 import RequestForm from './components/RequestForm'
 import ARView from './components/ARView'
+import About from './components/About'
 import { subcategories, categories } from './data/categories'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   const [requests, setRequests] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [showAR, setShowAR] = useState(false)
+  const [showAbout, setShowAbout] = useState(false)
   const [editingRequest, setEditingRequest] = useState(null)
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -278,6 +280,7 @@ function App() {
       <header>
         <h1>UrbanLog</h1>
         <p className="tagline">Log improvements for your community</p>
+        <button className="about-link" onClick={() => setShowAbout(true)}>About</button>
         <Auth session={session} />
       </header>
 
@@ -370,6 +373,10 @@ function App() {
 
       {showAR && (
         <ARView onClose={() => setShowAR(false)} />
+      )}
+
+      {showAbout && (
+        <About onClose={() => setShowAbout(false)} />
       )}
     </div>
   )

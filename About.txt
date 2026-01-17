@@ -1,0 +1,7 @@
+About
+
+This is a vibe-coded project for Strong Towns PDX by Jake Dennie-Lu
+
+The background map is from OpenStreetMap, a crowd-sourced, opensource map. Issue any corrections to the underlying map there.
+
+Please engage in good faith

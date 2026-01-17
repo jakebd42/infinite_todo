@@ -36,6 +36,34 @@ header .tagline {
   font-size: 0.875rem;
 }
 
+.about-link {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.about-link:hover {
+  color: white;
+}
+
+.about-modal p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.about-modal a {
+  color: #3b82f6;
+}
+
+.about-modal a:hover {
+  text-decoration: underline;
+}
+
 /* Auth Section */
 .auth-section {
   margin-left: auto;
